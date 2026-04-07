@@ -1,4 +1,4 @@
-# 🧠 BrainDocs AI
+#  BrainDocs AI
 
 > ⚡ *Chat with your documents — fully offline, private, and cost-efficient.*
 
@@ -6,27 +6,27 @@ BrainDocs AI is a **full-stack Retrieval-Augmented Generation (RAG) system** tha
 
 It combines:
 
-* 🔍 **Semantic search (FAISS)**
-* 🧠 **Keyword search (BM25)**
-* 🤖 **LLMs (Ollama / API)**
+*  **Semantic search (FAISS)**
+*  **Keyword search (BM25)**
+*  **LLMs (Ollama / API)**
 
 to deliver **accurate, source-grounded answers**.
 
 ---
 
-# 🚀 Features
+#  Features
 
-* 📂 Upload & auto-index documents (no restart required)
-* 📄 Supports: PDF, TXT, CSV, DOCX, XLSX, Images (OCR)
-* 🔍 Hybrid Retrieval (FAISS + BM25)
-* 🤖 Local LLM (Ollama) + Cloud fallback (Groq)
-* 📊 Source-based answers with score & metadata
-* 💬 Chat UI with session history
-* ⚡ Real-time ingestion & querying
+*  Upload & auto-index documents (no restart required)
+*  Supports: PDF, TXT, CSV, DOCX, XLSX, Images (OCR)
+*  Hybrid Retrieval (FAISS + BM25)
+*  Local LLM (Ollama) + Cloud fallback (Groq)
+*  Source-based answers with score & metadata
+*  Chat UI with session history
+*  Real-time ingestion & querying
 
 ---
 
-# 🏗️ Architecture
+#  Architecture
 
 ```text
 User → Frontend (Next.js)
@@ -110,7 +110,7 @@ braindocs_ai/
 
 # ⚙️ Tech Stack
 
-## 🧠 Backend
+## Backend
 
 * FastAPI
 * FAISS
@@ -121,7 +121,7 @@ braindocs_ai/
 
 ---
 
-## 💻 Frontend
+## Frontend
 
 * Next.js (React)
 * TypeScript
@@ -130,14 +130,14 @@ braindocs_ai/
 
 ---
 
-## 🤖 AI / LLM
+## AI / LLM
 
 * Ollama (Phi-3) → Local offline LLM
 * Groq API (Llama 3) → Cloud inference
 
 ---
 
-# 🧠 System Capabilities
+#  System Capabilities
 
 * Hybrid Retrieval (Semantic + Keyword)
 * Offline AI (Local LLM)
@@ -147,7 +147,7 @@ braindocs_ai/
 
 ---
 
-# 💡 Design Principles
+#  Design Principles
 
 * Offline-first architecture
 * Modular RAG pipeline
@@ -156,9 +156,9 @@ braindocs_ai/
 
 ---
 
-# ⚙️ Local Setup (Offline Ready)
+#  Local Setup (Offline Ready)
 
-## 🔹 Backend
+## Backend
 
 ```powershell
 cd backend
@@ -174,7 +174,7 @@ pip install fastapi uvicorn requests faiss-cpu sentence-transformers rank-bm25 p
 
 ---
 
-## 🔹 Install Ollama (Offline AI)
+## Install Ollama (Offline AI)
 
 ```bash
 ollama run phi3
@@ -182,7 +182,7 @@ ollama run phi3
 
 ---
 
-## 🔹 Environment Config
+## Environment Config
 
 ```env
 LLM_MODE=local
@@ -191,17 +191,17 @@ GROQ_API_KEY=your_key_here
 
 ---
 
-## 🔹 Run Backend
+## Run Backend
 
 ```powershell
 uvicorn app.main:app --reload
 ```
 
-👉 http://127.0.0.1:8000
+http://127.0.0.1:8000
 
 ---
 
-# 💻 Frontend Setup
+#  Frontend Setup
 
 ```powershell
 cd braindocs-frontend
@@ -209,11 +209,11 @@ npm install
 npm run dev
 ```
 
-👉 http://localhost:3000
+ http://localhost:3000
 
 ---
 
-## 🔹 Frontend Env
+##  Frontend Env
 
 ```env
 NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:8000
@@ -221,7 +221,7 @@ NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:8000
 
 ---
 
-# 🔄 How It Works
+# How It Works
 
 1. Upload document
 2. File stored in `data_room`
@@ -234,7 +234,7 @@ NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:8000
 
 ---
 
-# 🔌 API Endpoints
+#  API Endpoints
 
 | Endpoint         | Description       |
 | ---------------- | ----------------- |
@@ -245,7 +245,7 @@ NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:8000
 
 ---
 
-# 🧪 Troubleshooting
+# Troubleshooting
 
 ### ❌ Backend offline
 
@@ -270,7 +270,7 @@ rm -rf backend/vector_db
 
 ---
 
-# 🚀 Deployment (Free)
+# Deployment (Free)
 
 | Component | Platform |
 | --------- | -------- |
@@ -280,7 +280,7 @@ rm -rf backend/vector_db
 
 ---
 
-# 🔮 Future Improvements
+# Future Improvements
 
 * Authentication system
 * PDF page highlighting
@@ -290,7 +290,7 @@ rm -rf backend/vector_db
 
 ---
 
-# 💼 Use Cases
+# Use Cases
 
 * Document Q&A
 * Research assistant
@@ -299,7 +299,7 @@ rm -rf backend/vector_db
 
 ---
 
-# ⭐ Final Note
+# Final Note
 
 This project demonstrates:
 
@@ -310,7 +310,7 @@ This project demonstrates:
 
 ---
 
-> 🚀 BrainDocs AI is a **production-ready, privacy-first document intelligence system**.
+>  BrainDocs AI is a **production-ready, privacy-first document intelligence system**.
 
 ---
 
