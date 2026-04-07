@@ -1,59 +1,67 @@
 # BrainDocs AI
 
-BrainDocs AI is a full-stack RAG document Q and A system built with FastAPI, Next.js, Ollama, sentence-transformers, FAISS, and BM25.
+BrainDocs AI is a **full-stack Retrieval-Augmented Generation (RAG) system** that allows users to chat with documents like PDFs, CSVs, and images using AI.
 
-It supports upload, auto-ingestion, hybrid retrieval, and grounded responses with strict source attribution.
+It combines **semantic search (FAISS)**, **keyword search (BM25)**, and **LLMs (Ollama / API)** to deliver **accurate, source-grounded answers**.
 
-## Frontend Preview
+---
 
-![BrainDocs AI Frontend Layout](docs/images/frontend-layout.svg)
+##  Features
 
-## Key Features
+*  Upload & auto-index documents (no restart required)
+*  Supports: PDF, TXT, CSV, DOCX, XLSX, Images (OCR)
+*  Hybrid Retrieval (FAISS + BM25)
+*  Local LLM (Ollama) + Cloud LLM fallback
+*  Source-based answers with score & metadata
+*  Chat UI with session history
+*  Real-time ingestion & querying
 
-- Upload and auto-index without backend restart
-- Supported documents: PDF, TXT, CSV, DOCX, DOC, XLSX, XLS, PNG, JPG, JPEG, WEBP, BMP, TIF, TIFF
-- Hybrid retrieval: semantic search (FAISS) + keyword search (BM25)
-- Strict single-source mode to reduce hallucination and mixed-context noise
-- Optional structured multi-source comparison mode for compare-style questions
-- Chat history panel with auto-named sessions
-- Indexed documents panel in frontend
+---
 
-## Project Structure
+##  Architecture
+
+```text
+User → Frontend (Next.js)
+      ↓
+FastAPI Backend
+      ↓
+Ingestion Pipeline
+  ├── File Loader (PDF, CSV, OCR)
+  ├── Chunking
+  ├── Embeddings (MiniLM)
+  ├── FAISS (Vector DB)
+  ├── BM25 (Keyword Index)
+      ↓
+Retrieval Pipeline
+  ├── Semantic Search
+  ├── Keyword Search
+  ├── Hybrid Merge + Rerank
+      ↓
+LLM (Ollama / API)
+      ↓
+Response + Sources → Frontend
+```
+
+---
+
+## 📁 Project Structure
 
 ```text
 braindocs_ai/
-	backend/
-		app/
-			main.py
-			core/
-			services/
-			utils/
-		data_room/
-		vector_db/
-	braindocs-frontend/
-		app/
-		components/
-	docs/
-		images/
+├── backend/
+│   ├── app/
+│   ├── data_room/
+│   └── vector_db/
+├── braindocs-frontend/
+├── docs/
+│   └── images/
 ```
 
-## Architecture
+---
 
-1. User uploads a file from frontend
-2. Backend saves file in backend/data_room
-3. Backend parses file into records
-4. Text is chunked and embedded
-5. Vectors and metadata are saved in FAISS and meta store
-6. BM25 index is rebuilt from active corpus
-7. Query runs through hybrid retrieval and strict grounding
-8. LLM generates answer from selected context only
-9. Frontend renders answer and sources
+# LOCAL SETUP (FULL OFFLINE SUPPORT)
 
-## Backend Setup (FastAPI)
-
-### 1. Create and activate virtual environment
-
-PowerShell:
+##  1. Backend Setup (FastAPI)
 
 ```powershell
 cd backend
@@ -61,29 +69,56 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
-### 2. Install dependencies
+### Install dependencies
 
 ```powershell
-pip install fastapi uvicorn requests faiss-cpu sentence-transformers rank-bm25 pandas pypdf python-docx openpyxl pillow pytesseract
+pip install fastapi uvicorn requests faiss-cpu sentence-transformers rank-bm25 pandas pypdf python-docx openpyxl pillow pytesseract python-dotenv
 ```
 
-Optional for legacy DOC parsing:
+---
 
-```powershell
-pip install textract
+##  2. (OPTIONAL BUT IMPORTANT) Install Ollama
+
+ Required for **offline AI mode**
+
+Install Ollama and run:
+
+```bash
+ollama run phi3
 ```
 
-### 3. Run backend
+---
+
+##  3. Environment Configuration
+
+Create:
+
+```text
+backend/.env
+```
+
+```env
+LLM_MODE=local   # local OR api
+GROQ_API_KEY=your_key_here
+```
+
+---
+
+##  4. Run Backend
 
 ```powershell
 uvicorn app.main:app --reload
 ```
 
-Backend URL:
+Backend runs on:
 
-- http://127.0.0.1:8000
+```
+http://127.0.0.1:8000
+```
 
-## Frontend Setup (Next.js)
+---
+
+#  Frontend Setup (Next.js)
 
 ```powershell
 cd braindocs-frontend
@@ -91,125 +126,151 @@ npm install
 npm run dev
 ```
 
-Frontend URL:
+Frontend runs on:
 
-- http://localhost:3000
+```
+http://localhost:3000
+```
 
-Optional frontend environment variable:
+---
 
-Create braindocs-frontend/.env.local
+##  Frontend Environment (Optional)
+
+Create:
 
 ```text
+braindocs-frontend/.env.local
+```
+
+```env
 NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:8000
 ```
 
-## API Endpoints
+---
 
-### GET /
+#  HOW IT WORKS
 
-Health root status.
+1. Upload file via UI
+2. File saved in `backend/data_room`
+3. Auto-ingestion starts
+4. Chunks + embeddings created
+5. Stored in FAISS + BM25
+6. Query → hybrid retrieval
+7. LLM generates grounded answer
+8. UI shows answer + sources
 
-### GET /health
+---
 
-Backend connectivity check for frontend status indicator.
+#  API ENDPOINTS
 
-### POST /upload
+## Health
 
-Multipart upload and immediate ingestion.
-
-Response example:
-
-```json
-{
-	"status": "success",
-	"message": "File uploaded and indexed",
-	"file": "sample.pdf",
-	"ingestion": {
-		"status": "indexed",
-		"source": "sample.pdf",
-		"chunks": 12,
-		"documents": 48
-	}
-}
+```
+GET /
 ```
 
-### POST /ask
+## Upload File
 
-Request body:
-
-```json
-{
-	"query": "What is unit 1 syllabus?",
-	"top_k": 3
-}
+```
+POST /upload
 ```
 
-Response format:
+## Ask Question
 
-```json
-{
-	"answer": "...",
-	"sources": [
-		{
-			"source": "ml-syllabus.png",
-			"page": 1,
-			"score": 0.71
-		}
-	]
-}
+```
+GET /ask?query=your_question
 ```
 
-### GET /documents
+## Documents List
 
-Returns indexed document summary for frontend panel.
+```
+GET /documents
+```
 
-## Retrieval and Grounding Behavior
+---
 
-- Intent-aware token filtering for queries like syllabus, unit, curriculum
-- Lexical overlap filtering to remove weakly relevant chunks
-- Strict single-source mode is enabled by default
-- Multi-source structured output is only used for compare-style queries
-- Answer cleanup removes boilerplate and enforces concise output
+# LLM MODES
 
-## OCR Notes (Images)
+| Mode    | Description                |
+| ------- | -------------------------- |
+| `local` | Uses Ollama (offline AI)   |
+| `api`   | Uses cloud LLM (e.g. Groq) |
 
-Image OCR quality depends on local OCR setup.
+Automatic switching via `.env`
 
-- Required: pytesseract Python package
-- Required: Tesseract OCR executable installed and available in PATH
+---
 
-If OCR is missing, image ingestion may return no usable text.
+#  TROUBLESHOOTING
 
-## Common Troubleshooting
+### ❌ Backend offline in UI
 
-### Backend says offline in UI
+* Ensure backend is running on port 8000
+* Check frontend API URL
 
-- Confirm backend is running on http://127.0.0.1:8000
-- Check CORS and frontend backend URL value
+---
 
-### Upload works but answer is I do not know
+### ❌ "I don't know" answers
 
-- Verify file appears in backend/data_room
-- Verify file appears in indexed documents panel
-- Re-upload file to refresh chunks for that source
+* Re-upload file
+* Check ingestion logs (chunk count)
+* Verify document appears in index
 
-### OCR image answer is poor
+---
 
-- Ensure Tesseract OCR is installed and in PATH
-- Upload a clearer, higher contrast image
+### ❌ OCR not working
 
-### Empty or stale vector index
+* Install Tesseract OCR
+* Ensure it's in system PATH
 
-- Delete backend/vector_db and re-upload documents
-- Restart backend and check logs for chunk and ingestion counts
+---
 
-## Production Readiness Notes
+### ❌ Empty vector DB
 
-- Add authentication and file-level access control
-- Add persistent database for chat sessions and audit logs
-- Add background job queue for heavy ingestion workloads
-- Add monitoring and tracing for latency and failures
+```powershell
+rm -rf backend/vector_db
+```
 
-## License
+Restart and re-upload
 
-Use and modify freely for learning and internal project work.
+---
+
+#  DEPLOYMENT (FREE)
+
+| Component | Platform |
+| --------- | -------- |
+| Frontend  | Vercel   |
+| Backend   | Render   |
+| LLM       | Groq     |
+
+---
+
+#  FUTURE IMPROVEMENTS
+
+* Authentication system
+*  PDF page highlighting
+*  Streaming responses
+*  Structured CSV querying
+*  Usage analytics
+
+---
+
+#  USE CASES
+
+* Research document Q&A
+* Resume analysis
+* Internal knowledge bots
+* Academic syllabus queries
+
+---
+
+#  FINAL NOTE
+
+This project demonstrates:
+
+* Full-stack AI system design
+* Hybrid retrieval (FAISS + BM25)
+* Local + cloud LLM architecture
+
+---
+
+**If you like this project, give it a ⭐ on GitHub!**
