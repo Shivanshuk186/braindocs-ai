@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;900&display=swap');
+
+@import "tailwindcss";
+
+/* 🔥 ROOT DESIGN TOKENS */
+:root {
+  --bg: #FFFDF5;
+  --black: #000000;
+  --accent: #FF6B6B;
+  --yellow: #FFD93D;
+  --violet: #C4B5FD;
+}
+body {
+  font-family: var(--font-space), sans-serif;
+}
+/* 🔥 GLOBAL RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 🔥 BODY */
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: var(--bg);
+  color: var(--black);
+}
+
+/* 🔥 SCROLLBAR */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--black);
+  border: 2px solid var(--bg);
+}
+
+/* 🔥 TEXT SELECTION */
+::selection {
+  background: var(--yellow);
+  color: var(--black);
+}
+
+/* 🔥 HARD SHADOW UTIL */
+.shadow-brutal {
+  box-shadow: 6px 6px 0px 0px #000;
+}
+
+/* 🔥 CARD */
+.brutal-card {
+  background: white;
+  border: 4px solid black;
+  box-shadow: 8px 8px 0px 0px #000;
+  transition: all 0.2s ease;
+}
+
+.brutal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 12px 12px 0px 0px #000;
+}
+
+/* 🔥 BUTTON */
+.brutal-btn {
+  background: var(--accent);
+  border: 4px solid black;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  box-shadow: 4px 4px 0px 0px #000;
+  transition: all 0.1s ease;
+}
+
+.brutal-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* 🔥 INPUT */
+.brutal-input {
+  border: 4px solid black;
+  padding: 10px;
+  font-weight: bold;
+  background: white;
+}
+
+.brutal-input:focus {
+  background: var(--yellow);
+  outline: none;
+}
+
+/* 🔥 CHAT BUBBLES */
+.user-bubble {
+  background: var(--accent);
+  border: 4px solid black;
+  box-shadow: 4px 4px 0px 0px #000;
+  padding: 12px;
+  max-width: 70%;
+  margin-left: auto;
+}
+
+.bot-bubble {
+  background: white;
+  border: 4px solid black;
+  box-shadow: 6px 6px 0px 0px #000;
+  padding: 12px;
+  max-width: 70%;
+}
+
+/* 🔥 SOURCE BOX */
+.source-box {
+  margin-top: 10px;
+  padding: 8px;
+  background: var(--violet);
+  border: 3px solid black;
+  font-size: 12px;
+}
+
+/* 🔥 HALFTONE BACKGROUND */
+.bg-dots {
+  background-image: radial-gradient(#000 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* 🔥 GRID BACKGROUND */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px);
+}
+
+/* 🔥 ANIMATION */
+@keyframes bounce-fast {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.animate-bounce-fast {
+  animation: bounce-fast 0.6s infinite;
+}
+
+/* 🔥 SPIN SLOW */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+
+/* 🔥 MESSAGE ANIMATION */
+.fade-in {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

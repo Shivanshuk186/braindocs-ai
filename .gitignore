@@ -1,0 +1,17 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Env
+.env
+
+# Vector DB
+vector_db/
+
+# Node
+node_modules/
+.next/
+
+# OS
+.DS_Store
